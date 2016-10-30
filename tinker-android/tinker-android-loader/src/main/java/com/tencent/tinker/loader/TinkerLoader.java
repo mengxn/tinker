@@ -152,9 +152,9 @@ public class TinkerLoader extends AbstractTinkerLoader {
 
         ShareSecurityCheck securityCheck = new ShareSecurityCheck(app);
 
-        int returnCode = ShareTinkerInternals.checkSignatureAndTinkerID(app, patchVersionFile, securityCheck);
-        if (returnCode != 0) {
-            Log.w(TAG, "tryLoadPatchFiles:checkSignatureAndTinkerID");
+        int returnCode = ShareTinkerInternals.checkTinkerPackage(app, tinkerFlag, patchVersionFile, securityCheck);
+        if (returnCode != ShareConstants.ERROR_PACKAGE_CHECK_OK) {
+            Log.w(TAG, "tryLoadPatchFiles:checkTinkerPackage");
             resultIntent.putExtra(ShareIntentUtil.INTENT_PATCH_PACKAGE_PATCH_CHECK, returnCode);
             ShareIntentUtil.setIntentReturnCode(resultIntent, ShareConstants.ERROR_LOAD_PATCH_PACKAGE_CHECK_FAIL);
             return;
@@ -224,7 +224,7 @@ public class TinkerLoader extends AbstractTinkerLoader {
 
         //now we can load patch resource
         if (isEnabledForResource) {
-            boolean loadTinkerResources = TinkerResourceLoader.loadTinkerResources(tinkerLoadVerifyFlag, patchVersionDirectory, resultIntent);
+            boolean loadTinkerResources = TinkerResourceLoader.loadTinkerResources(app, tinkerLoadVerifyFlag, patchVersionDirectory, resultIntent);
             if (!loadTinkerResources) {
                 Log.w(TAG, "tryLoadPatchFiles:onPatchLoadResourcesFail");
                 return;
